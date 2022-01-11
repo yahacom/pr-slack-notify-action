@@ -8273,6 +8273,14 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 1434:
+/***/ ((module) => {
+
+module.exports = eval("require")("@slack/webhook");
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -8444,16 +8452,47 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
+const { IncomingWebhook } = __nccwpck_require__(1434);
 
 (async () => {
   try {
     const SLACK_WEBHOOK_URL = core.getInput('SLACK_WEBHOOK_URL', { required: true });
     const PR_DATA = core.getInput('PR_DATA', { required: true });
-    console.log(SLACK_WEBHOOK_URL, PR_DATA);
+    console.log('[ACTION]: ', SLACK_WEBHOOK_URL, PR_DATA);
+    const webhook = new IncomingWebhook(SLACK_WEBHOOK_URL);
+
+    await webhook.send({
+      blocks: [
+        {
+          type: 'section',
+          text: { type: 'mrkdwn', text: PR_DATA },
+          fields: [
+            { type: 'mrkdwn', text: '*Title*\nJohn Smith' },
+            { type: 'mrkdwn', text: '*Author*\n$8.50' },
+          ]
+        },
+      ],
+      // attachments: [
+      //   {
+      //     color: 'good',
+      //     blocks: [
+      //       {
+      //         type: 'section',
+      //         fields: [
+      //           { type: 'mrkdwn', text: '*Name*\nJohn Smith' },
+      //           { type: 'mrkdwn', text: '*Amount*\n$8.50' },
+      //         ]
+      //       },
+      //     ]
+      //   }
+      // ]
+    });
   } catch (error) {
     core.setFailed(error.message);
   }
 })();
+// Error: .github/workflows/demo.yml (Line: 25, Col: 20): A mapping was not expected
+// Error: The template is not valid. .github/workflows/demo.yml (Line: 25, Col: 20): A mapping was not expected
 
 })();
 
