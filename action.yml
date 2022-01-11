@@ -1,0 +1,12 @@
+name: 'PR Slack notify'
+description: 'Send notification about opened PR to Slack channel via webhook'
+inputs:
+  SLACK_WEBHOOK_URL:
+    description: 'Slack app webhook url'
+    required: true
+  PR_DATA:
+    description: 'Data object about PR'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
